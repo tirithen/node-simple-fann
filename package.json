@@ -1,0 +1,19 @@
+{
+    "name": "simple-fann",
+    "version": "0.0.1",
+    "author": "Fredrik Söderström <tirihten@gmail.com>",
+    "description": "A Node.js wrapper for FANN (Fast Artificial Neural Network Library) that uses MongoDB to store the models",
+    "main": "index.js",
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:tirithen/node-simple-fann.git"
+    },
+    "dependencies": {
+        "fann": "0.2.x",
+        "mongodb": "1.3.x"
+    },
+    "license": "GPLv3",
+    "engines": {
+        "node": ">=0.10"
+    }
+}
