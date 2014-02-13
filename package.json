@@ -1,6 +1,6 @@
 {
     "name": "simple-fann",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "author": "Fredrik Söderström <tirihten@gmail.com>",
     "description": "A Node.js wrapper for FANN (Fast Artificial Neural Network Library) that uses MongoDB to store the models",
     "main": "index.js",
