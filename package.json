@@ -10,7 +10,8 @@
     },
     "dependencies": {
         "fann": "0.2.x",
-        "mongodb": "1.3.x"
+        "mongodb": "1.3.x",
+        "mkdirp": "0.3.x"
     },
     "license": "GPLv3",
     "engines": {
