@@ -94,7 +94,30 @@ Model.prototype.save = function (callback) {
         );
 };
 
-Model.prototype.train = function (callback) {
+Model.prototype._runTraining = function (documents, callback) {
+    var data, neuralNetwork;
+
+    data = documents.map(function (document) {
+        return [ document.input, document.output ];
+    });
+
+    neuralNetwork = new fann.shortcut(
+        self.layers[0],
+        self.layers[1],
+        self.layers[2]
+    );
+
+    neuralNetwork.train(data, {
+        error: self.error,
+        epochs: self.epochs
+    });
+
+    // TODO: only save the new neural network if it was better than the last one
+    self.neuralNetwork = neuralNetwork;
+    self.save(callback);
+};
+
+Model.prototype.train = function (filterCallback, callback) {
     var self = this;
 
     console.log('Training ' + this.name + '...');
@@ -102,26 +125,18 @@ Model.prototype.train = function (callback) {
         .collection('traningData-' + this.name)
         .find()
         .toArray(function (error, documents) {
-            var data = documents.map(function (document) {
-                    return [ document.input, document.output ];
-                }),
-                neuralNetwork = new fann.shortcut(
-                    self.layers[0],
-                    self.layers[1],
-                    self.layers[2]
-                );
-
-            neuralNetwork.train(data, {
-                error: self.error,
-                epochs: self.epochs
-            });
-
-            // TODO: only save the new neural network if it was better than the last one
-            self.neuralNetwork = neuralNetwork;
-            self.save(callback);
-
-            if (callback instanceof Function) {
+            if (error) {
                 callback(error);
+            } else if (filterCallback instanceof Function) {
+                filterCallback(documents, function (error, filteredDocuments) {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        self._runTraining(filteredDocuments, callback);
+                    }
+                });
+            } else {
+                self._runTraining(documents, callback);
             }
         });
 };
